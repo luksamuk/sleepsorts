@@ -1,0 +1,18 @@
+#!/usr/lib/plan9/bin/rc
+
+fn f {
+    sleep $1
+    echo $1
+}
+
+fn sleepsort {
+    for(i in $*) {
+      f $i &
+    }
+    wait
+}
+
+fn test_sleepsort {
+    sleepsort 5 1 3 2 4
+}
+

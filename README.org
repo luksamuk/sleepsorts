@@ -1,0 +1,24 @@
+#+TITLE: sleepsorts
+#+AUTHOR: Lucas Vieira
+#+EMAIL: lucasvieira@protonmail.com
+
+* What is this?
+
+This is a collection of Sleepsort implementations, on various
+languages and frameworks.
+
+Right now, the following implementations are provided:
+
+- Common Lisp
+- rc
+
+* Usage
+
+Each language/framework uses a specific way to run. I will post more
+information here soon.
+
+* License
+
+This project is distributed under the MIT License. See LICENSE for
+details.
+
