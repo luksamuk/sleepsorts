@@ -1,0 +1,8 @@
+LD=$PLAN9/bin/9l
+CC=$PLAN9/bin/9c
+
+sleepsort.out: sleepsort.o
+	   $LD -o $target $prereq
+
+%.o: %.c
+	   $CC $CFLAGS $stem.c

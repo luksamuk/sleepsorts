@@ -1,0 +1,7 @@
+<$/objtype/mkfile
+
+sleepsort: sleepsort.$O
+	   $LD -o $target $prereq
+
+%.$O:	   %.c
+	   $CC $CFLAGS $stem.c

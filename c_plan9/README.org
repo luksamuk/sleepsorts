@@ -1,0 +1,29 @@
+#+TITLE: Sleepsort in C for Plan 9
+
+* Requirements
+
+- Plan 9 (9front, 9legacy, etc)
+  - You already have everything.
+- Linux
+  - Plan 9 From User Space (=plan9port=);
+  - Defining the variable `$PLAN9` in your shell to the root of
+    =plan9port=.
+- Windows
+  - GTFO.
+
+* Compiling
+
+** On Plan 9
+
+Simply run =mk=. This should create an executable on your directory.
+
+** On Linux
+
+After configuring =plan9port=, add =$PLAN9/bin= temporarily to your PATH,
+then run:
+
+#+begin_src rc
+mk -f mkfile-linux
+#+end_src
+
+This should create an executable in your directory.
