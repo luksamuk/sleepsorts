@@ -15,7 +15,7 @@ exec ros -Q -- $0 "$@"
 
 (defun cancel-sleepsort (sig)
   (declare (ignore sig))
-  (write-line "~&Recebido SIGINT. Cancelando...")
+  (write-line "Recebido SIGINT. Cancelando...")
   (free-signal-handler +sigint+)
   (exit-event-loop))
 

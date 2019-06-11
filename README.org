@@ -11,6 +11,7 @@ Right now, the following implementations are provided:
 
 - Common Lisp
 - rc
+- C (for Plan 9)
 - Common Lisp (Roswell script; cancellable)
 
 * Usage
