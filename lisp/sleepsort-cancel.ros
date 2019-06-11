@@ -1,0 +1,47 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -- $0 "$@"
+|#
+
+(progn (ros:ensure-asdf)
+       (unless (find-package :cl-async)
+	 (ql:quickload :cl-async :silent t)))
+
+(defpackage :ros.sleepsort
+  (:use #:cl #:cl-async))
+
+(in-package :ros.sleepsort)
+
+(defun cancel-sleepsort (sig)
+  (declare (ignore sig))
+  (write-line "~&Recebido SIGINT. Cancelando...")
+  (free-signal-handler +sigint+)
+  (exit-event-loop))
+
+(defun sleepsort (&rest numbers)
+  (let ((nums-left (list-length numbers)))
+    (start-event-loop
+     (lambda ()
+       (signal-handler +sigint+ #'cancel-sleepsort)
+       (mapc (lambda (x)
+	       (delay (lambda ()
+			(format t "~a~&" x)
+			(decf nums-left)
+			(when (zerop nums-left)
+			  (free-signal-handler +sigint+)))
+		      :time x))
+	     numbers)))))
+			
+(defun main (&rest args)
+  (let ((numbers
+	 (handler-case
+	     (loop for arg in args
+		collect (parse-integer arg))
+	   (error () nil))))
+    (if (null numbers)
+	(format t "Erro: Informe apenas numeros.~&")
+        (apply #'sleepsort numbers))
+    (write-line "Fim do programa.")))
+
+;;; vim: set ft=lisp lisp:
