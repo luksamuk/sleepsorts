@@ -13,25 +13,26 @@ exec ros -Q -- $0 "$@"
 
 (in-package :ros.sleepsort)
 
-(defun cancel-sleepsort (sig)
-  (declare (ignore sig))
-  (write-line "Recebido SIGINT. Cancelando...")
-  (free-signal-handler +sigint+)
-  (exit-event-loop))
-
 (defun sleepsort (&rest numbers)
-  (let ((nums-left (list-length numbers)))
-    (start-event-loop
-     (lambda ()
-       (signal-handler +sigint+ #'cancel-sleepsort)
-       (mapc (lambda (x)
-	       (delay (lambda ()
-			(format t "~a~&" x)
-			(decf nums-left)
-			(when (zerop nums-left)
-			  (free-signal-handler +sigint+)))
-		      :time x))
-	     numbers)))))
+  (let* ((nums-left (length numbers))
+	 (events (mapcar (lambda (x)
+			   (delay (lambda ()
+				    (format t "~a~&" x)
+				    (decf nums-left)
+				    (when (zerop nums-left)
+				      (free-signal-handler +sigint+)))
+				  :time x))
+			 numbers)))
+    (signal-handler +sigint+
+		    (lambda (sig)
+		      (declare (ignore sig))
+		      (write-line "Recebido SIGINT. Cancelando...")
+		      (free-signal-handler +sigint+)
+		      (mapc (lambda (ev)
+			      (unless (event-freed-p ev)
+				(free-event ev)))
+			    events)))))
+				     
 			
 (defun main (&rest args)
   (let ((numbers
@@ -41,7 +42,9 @@ exec ros -Q -- $0 "$@"
 	   (error () nil))))
     (if (null numbers)
 	(format t "Erro: Informe apenas numeros.~&")
-        (apply #'sleepsort numbers))
+	(start-event-loop
+	 (lambda ()
+	   (apply #'sleepsort numbers))))
     (write-line "Fim do programa.")))
 
 ;;; vim: set ft=lisp lisp:
