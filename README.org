@@ -13,6 +13,7 @@ Right now, the following implementations are provided:
 - rc
 - C (for Plan 9)
 - Common Lisp (Roswell script; cancellable)
+- Common Lisp (Roswell script; cancellable; normalized time)
 
 * Usage
 
